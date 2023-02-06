@@ -3,7 +3,7 @@ import React from "react"
 
 import { Cascader, Form } from "antd"
 import { support_cities } from "../city"
-import { useSalaryInput } from "../provider/salary-provider"
+import { useSalary } from "../provider/salary-provider"
 import { SalaryContextType } from "../state/salary.state"
 import { city_polices, default_city_policy } from "../city-config"
 import { hpfbCalculate, sibCalculate } from "../util"
@@ -18,7 +18,7 @@ export const RegionSelect = () => {
         setSIB,
         enableCustomHPFB,
         setHPFB
-    } = useSalaryInput() as SalaryContextType
+    } = useSalary() as SalaryContextType
 
     const regionChange = (e: any) => {
         const region = e[e.length - 1]
@@ -34,9 +34,9 @@ export const RegionSelect = () => {
     }
 
     return (
-        <Form style={{ width: "100px" }}>
+        <Form className="input-region">
             <Form.Item>
-                <Cascader style={{ width: "70%" }} defaultValue={[region]} options={support_cities}
+                <Cascader defaultValue={[region]} options={support_cities}
                           onChange={regionChange}
                           placeholder="Select Address" />
             </Form.Item>

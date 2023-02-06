@@ -2,9 +2,10 @@ import * as React from "react"
 import { createContext, useContext, useState } from "react"
 import { city_polices, CityPolicy, default_city_policy } from "../city-config"
 import { SalaryContextType } from "../state/salary.state"
+import { SalaryResultType } from "../salary.model"
 
 const SalaryContext = createContext<SalaryContextType | null>(null)
-export const useSalaryInput = () => useContext<SalaryContextType | null>(SalaryContext)
+export const useSalary = () => useContext<SalaryContextType | null>(SalaryContext)
 
 // @ts-ignore
 export const SalaryProvider = ({ children }) => {
@@ -16,6 +17,20 @@ export const SalaryProvider = ({ children }) => {
     const [oneOffBonus, dispatchSetOneOffBonus] = useState<number>(0)
     const [enableCustomSIB, dispatchSetEnableCustomSIB] = useState<boolean>(false)
     const [enableCustomHPFB, dispatchSetEnableCustomHPFB] = useState<boolean>(false)
+    const [salaryResult, dispatchSetSalaryResult] = useState<SalaryResultType>({
+        endowmentUser: 0,
+        endowmentCompany: 0,
+        medicalUser: 0,
+        medicalCompany: 0,
+        unemploymentUser: 0,
+        unemploymentCompany: 0,
+        maternityUser: 0,
+        maternityCompany: 0,
+        workInjuryCompany: 0,
+        workInjuryUser: 0,
+        hpfCompany: 0,
+        hpfUser: 0
+    })
 
     const setRegion = (str: string | null) => {
         if (str) {
@@ -64,6 +79,12 @@ export const SalaryProvider = ({ children }) => {
             dispatchSetCityPolicy(cityPolicy)
         }
     }
+
+    const setSalaryResult = (salaryResult: SalaryResultType | null) => {
+        if (salaryResult) {
+            dispatchSetSalaryResult(salaryResult)
+        }
+    }
     return (
         <SalaryContext.Provider
             value={{
@@ -82,7 +103,9 @@ export const SalaryProvider = ({ children }) => {
                 oneOffBonus,
                 setOneOffBonus,
                 cityPolicy,
-                setCityPolicy
+                setCityPolicy,
+                salaryResult,
+                setSalaryResult
             }}>
             {children}
         </SalaryContext.Provider>

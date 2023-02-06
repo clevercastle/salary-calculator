@@ -1,9 +1,10 @@
 import React from "react"
 
 import { Button, Checkbox, Form, InputNumber } from "antd"
-import { useSalaryInput } from "../provider/salary-provider"
+import { useSalary } from "../provider/salary-provider"
 import { SalaryContextType } from "../state/salary.state"
 import { hpfbCalculate, sibCalculate } from "../util"
+import { calculateSalary } from "../salary.model"
 
 export const SalaryInput = () => {
     const {
@@ -19,16 +20,16 @@ export const SalaryInput = () => {
         setEnableCustomHPFB,
         oneOffBonus,
         setOneOffBonus,
-        cityPolicy
-    } = useSalaryInput() as SalaryContextType
+        cityPolicy,
+        setSalaryResult
+    } = useSalary() as SalaryContextType
 
 
     return (
         <div>
-            <Form onSubmitCapture={() => {
-                console.log("?????????????????")
-                console.log(sib)
-                console.log(hpfb)
+            <Form className="input-form" onSubmitCapture={() => {
+                const result = calculateSalary(salary, sib, hpfb, oneOffBonus, cityPolicy)
+                setSalaryResult(result)
             }}>
                 <Form.Item label="薪水" rules={[{ required: true, message: "必填" }]}>
                     <InputNumber value={salary} onChange={(e) => {
@@ -42,30 +43,33 @@ export const SalaryInput = () => {
                     }} />
                 </Form.Item>
                 <Form.Item label="社保基数">
-                    <Checkbox checked={enableCustomSIB} onChange={e => {
-                        console.log(e.target.checked)
-                        setEnableCustomSIB(e.target.checked)
-                        if (!e.target.checked) {
-                            setSIB(sibCalculate(salary, cityPolicy))
-                        }
-                    }} />
-                    <InputNumber disabled={!enableCustomSIB} value={sib} onChange={(e) => setSIB(e)} />
+                    <Checkbox className="input-checkbox" checked={enableCustomSIB}
+                              onChange={e => {
+                                  console.log(e.target.checked)
+                                  setEnableCustomSIB(e.target.checked)
+                                  if (!e.target.checked) {
+                                      setSIB(sibCalculate(salary, cityPolicy))
+                                  }
+                              }} />
+                    <InputNumber className="input-number" disabled={!enableCustomSIB} value={sib}
+                                 onChange={(e) => setSIB(e)} />
                 </Form.Item>
                 <Form.Item label="公积金基数">
-                    <Checkbox checked={enableCustomHPFB} onChange={e => {
+                    <Checkbox className="input-checkbox" checked={enableCustomHPFB} onChange={e => {
                         setEnableCustomHPFB(e.target.checked)
                         if (!e.target.checked) {
                             setHPFB(hpfbCalculate(salary, cityPolicy))
                         }
                     }} />
-                    <InputNumber disabled={!enableCustomHPFB} value={hpfb} onChange={(e) => setHPFB(e)} />
+                    <InputNumber className="input-number" disabled={!enableCustomHPFB} value={hpfb}
+                                 onChange={(e) => setHPFB(e)} />
                 </Form.Item>
                 <Form.Item label="年终奖">
                     <InputNumber value={oneOffBonus} onChange={(e) => setOneOffBonus(e)} />
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit">
-                        Submit
+                        计算
                     </Button>
                 </Form.Item>
             </Form>

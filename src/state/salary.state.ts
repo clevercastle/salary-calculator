@@ -1,4 +1,5 @@
 import { CityPolicy } from "../city-config"
+import { SalaryResultType } from "../salary.model"
 
 export interface SalaryContextType {
     region: string
@@ -17,9 +18,15 @@ export interface SalaryContextType {
     setEnableCustomHPFB: (bol: boolean | null) => void
     setOneOffBonus: (num: number | null) => void
     setCityPolicy: (cityPolicy: CityPolicy | null) => void
+
+    salaryResult: SalaryResultType
+    setSalaryResult: (salaryResult: SalaryResultType | null) => void
 }
+
 
 export enum OneOffBonusType {
     combine,
     single,
 }
+
+

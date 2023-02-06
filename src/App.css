@@ -1,44 +1,38 @@
-.InputColumn {
-    width: 30%;
-    margin: 15px 15px;
+* {
+    box-sizing: border-box;
+}
+
+.input {
+    width: 500px;
+    margin: 5px auto;
+}
+
+.result-table {
+    flex: 1;
+}
+
+.result-graph {
+    width: 600px;
 }
 
 
-/*.App {*/
-/*  text-align: center;*/
-/*}*/
+.input-region {
+    width: 40%;
+    margin-left: 20px;
+}
 
-/*.App-logo {*/
-/*  height: 40vmin;*/
-/*  pointer-events: none;*/
-/*}*/
+.input-form {
+    width: 80%;
+    margin-left: 20px;
+}
 
-/*@media (prefers-reduced-motion: no-preference) {*/
-/*  .App-logo {*/
-/*    animation: App-logo-spin infinite 20s linear;*/
-/*  }*/
-/*}*/
+.input-checkbox {
+    margin-top: 5px;
+    margin-right: 20px;
+}
 
-/*.App-header {*/
-/*  background-color: #282c34;*/
-/*  min-height: 100vh;*/
-/*  display: flex;*/
-/*  flex-direction: column;*/
-/*  align-items: center;*/
-/*  justify-content: center;*/
-/*  font-size: calc(10px + 2vmin);*/
-/*  color: white;*/
-/*}*/
+.input-number {
+    padding-top: 3px;
+    margin-bottom: auto;
+}
 
-/*.App-link {*/
-/*  color: #61dafb;*/
-/*}*/
-
-/*@keyframes App-logo-spin {*/
-/*  from {*/
-/*    transform: rotate(0deg);*/
-/*  }*/
-/*  to {*/
-/*    transform: rotate(360deg);*/
-/*  }*/
-/*}*/

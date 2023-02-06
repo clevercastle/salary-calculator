@@ -1,8 +1,6 @@
 import { CityPolicy } from "./city-config"
 
 export const sibCalculate = (salary: number, cityPolicy: CityPolicy) => {
-    console.log(salary)
-    console.log(cityPolicy)
     if (salary > cityPolicy.sibMax) {
         return cityPolicy.sibMax
     }
