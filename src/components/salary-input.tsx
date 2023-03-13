@@ -1,161 +1,164 @@
 import React from "react"
-
+import { useCombine } from "../util/input"
 import { Button, Checkbox, Form, InputNumber, Radio, Space } from "antd"
-import { useSalary } from "../provider/salary-provider"
-import { SalaryContextType } from "../state/salary.state"
 import { hpfbCalculate, sibCalculate } from "../util"
-import { calculateSalary } from "../salary.model"
+import { useSalary } from "../provider/salary-provider"
 
 export const SalaryInput = () => {
+    const { cityPolicy, salaryInput, updateSalaryInput, salaryInputAdvance, updateSalaryInputAdvance } = useSalary()
     const {
-        salary, setSalary,
-        sib, setSIB,
-        enableCustomSIB, setEnableCustomSIB,
-        hpfb, setHPFB,
-        enableCustomHPFB, setEnableCustomHPFB,
-        oneOffBonus, setOneOffBonus,
-        cityPolicy,
-        setSalaryResult,
-        oneOffBonusType, setOneOffBonusType,
-        childEducation, setChildEducation, enableChildEducation, setEnableChildEducation,
-        continuingEducation, setContinuingEducation, enableContinuingEducation, setEnableContinuingEducation,
-        seriousDiseases, setSeriousDiseases, enableSeriousDiseases, setEnableSeriousDiseases,
-        housingLoanInterest, setHousingLoanInterest, enableHousingLoanInterest, setEnableHousingLoanInterest,
-        housingRent, setHousingRent, enableHousingRent, setEnableHousingRent,
-        elderSupport, setElderSupport, enableElderSupport, setEnableElderSupport,
-        babyCare, setBabyCare, enableBabyCare, setEnableBabyCare
-    } = useSalary() as SalaryContextType
-
+        combine: sib,
+        toggle: toggleSIB,
+        updateNumber: updateSIB,
+    } = useCombine(salaryInput.salary, cityPolicy, sibCalculate)
+    const {
+        combine: hpfb,
+        toggle: toggleHPFB,
+        updateNumber: updateHPFB,
+    } = useCombine(salaryInput.salary, cityPolicy, hpfbCalculate)
 
     const list = [
         {
             key: "childEducation",
+            enableKey: "enableChildEducation",
             label: "子女教育",
-            enable: enableChildEducation,
-            setEnable: setEnableChildEducation,
-            value: childEducation,
-            setValue: setChildEducation
+            enable: salaryInputAdvance.enableChildEducation,
+            value: salaryInputAdvance.childEducation,
         },
         {
             key: "continuingEducation",
+            enableKey: "enableContinuingEducation",
             label: "继续教育",
-            enable: enableContinuingEducation,
-            setEnable: setEnableContinuingEducation,
-            value: continuingEducation,
-            setValue: setContinuingEducation
+            enable: salaryInputAdvance.enableContinuingEducation,
+            value: salaryInputAdvance.continuingEducation,
         },
         {
             key: "seriousDiseases",
+            enableKey: "enableSeriousDiseases",
             label: "大病医疗",
-            enable: enableSeriousDiseases,
-            setEnable: setEnableSeriousDiseases,
-            value: seriousDiseases,
-            setValue: setSeriousDiseases
+            enable: salaryInputAdvance.enableSeriousDiseases,
+            value: salaryInputAdvance.seriousDiseases,
         },
         {
             key: "housingLoanInterest",
+            enableKey: "enableHousingLoanInterest",
             label: "住房贷款利息",
-            enable: enableHousingLoanInterest,
-            setEnable: setEnableHousingLoanInterest,
-            value: housingLoanInterest,
-            setValue: setHousingLoanInterest
+            enable: salaryInputAdvance.enableHousingLoanInterest,
+            value: salaryInputAdvance.housingLoanInterest,
         },
         {
             key: "housingRent",
+            enableKey: "enableHousingRent",
             label: "住房租金",
-            enable: enableHousingRent,
-            setEnable: setEnableHousingRent,
-            value: housingRent,
-            setValue: setHousingRent
+            enable: salaryInputAdvance.enableHousingRent,
+            value: salaryInputAdvance.housingRent,
         },
         {
             key: "elderSupport",
+            enableKey: "enableElderSupport",
             label: "赡养老人",
-            enable: enableElderSupport,
-            setEnable: setEnableElderSupport,
-            value: elderSupport,
-            setValue: setElderSupport
+            enable: salaryInputAdvance.enableElderSupport,
+            value: salaryInputAdvance.elderSupport,
         },
         {
             key: "babyCare",
+            enableKey: "enableBabyCare",
             label: "3岁以下婴幼儿照护",
-            enable: enableBabyCare,
-            setEnable: setEnableBabyCare,
-            value: babyCare,
-            setValue: setBabyCare
-        }
+            enable: salaryInputAdvance.enableBabyCare,
+            value: salaryInputAdvance.babyCare,
+        },
     ]
     const rows = []
     for (let i = 0; i < list.length; i++) {
-        rows.push(<Form.Item key={list[i].key} label={list[i].label}>
-            <Checkbox className="input-checkbox" checked={list[i].enable}
-                      onChange={e => {
-                          list[i].setEnable(e.target.checked)
-                      }} />
-            <InputNumber className="input-number" disabled={!list[i].enable}
-                         value={list[i].value}
-                         onChange={(e) => {
-                             if (e != null && e >= 0) {
-                                 list[i].setValue(e)
-                             }
-                         }} />
-        </Form.Item>)
+        rows.push(
+            <Form.Item key={list[i].key} label={list[i].label}>
+                <Checkbox
+                    className="input-checkbox"
+                    checked={list[i].enable}
+                    onChange={(e) => {
+                        updateSalaryInputAdvance({ [list[i].enableKey]: e.target.checked, [list[i].key]: 0 })
+                    }}
+                />
+                <InputNumber
+                    className="input-number"
+                    disabled={!list[i].enable}
+                    step={100}
+                    value={list[i].value}
+                    onChange={(e) => {
+                        updateSalaryInputAdvance({ [list[i].key]: e })
+                    }}
+                />
+            </Form.Item>
+        )
     }
 
     return (
         <div>
-            <Form className="input-form" onSubmitCapture={() => {
-                const result = calculateSalary(salary, sib, hpfb, cityPolicy, oneOffBonus, oneOffBonusType,
-                    childEducation,
-                    continuingEducation,
-                    seriousDiseases,
-                    housingLoanInterest,
-                    housingRent,
-                    elderSupport,
-                    babyCare)
-                setSalaryResult(result)
-            }}>
+            <Form className="input-form">
                 <Form.Item label="薪水" rules={[{ required: true, message: "必填" }]}>
-                    <InputNumber value={salary} onChange={(e) => {
-                        setSalary(e)
-                        if (!enableCustomSIB) {
-                            setSIB(sibCalculate(e!!, cityPolicy))
-                        }
-                        if (!enableCustomHPFB) {
-                            setHPFB(hpfbCalculate(e!!, cityPolicy))
-                        }
-                    }} />
+                    <InputNumber
+                        step={100}
+                        value={salaryInput.salary}
+                        onChange={(e) => {
+                            if (!sib.enabled) {
+                                updateSIB(sibCalculate(e!!, cityPolicy))
+                            }
+                            if (!hpfb.enabled) {
+                                updateHPFB(hpfbCalculate(e!!, cityPolicy))
+                            }
+                            updateSalaryInput({ salary: e!! })
+                        }}
+                    />
                 </Form.Item>
                 <Form.Item label="社保基数">
-                    <Checkbox className="input-checkbox" checked={enableCustomSIB}
-                              onChange={e => {
-                                  console.log(e.target.checked)
-                                  setEnableCustomSIB(e.target.checked)
-                                  if (!e.target.checked) {
-                                      setSIB(sibCalculate(salary, cityPolicy))
-                                  }
-                              }} />
-                    <InputNumber className="input-number" disabled={!enableCustomSIB} value={sib}
-                                 onChange={(e) => setSIB(e)} />
+                    <Checkbox
+                        className="input-checkbox"
+                        checked={sib.enabled}
+                        onChange={(e) => {
+                            toggleSIB(e.target.checked)
+                        }}
+                    />
+                    <InputNumber
+                        step={100}
+                        className="input-number"
+                        disabled={!sib.enabled}
+                        value={sib.value}
+                        onChange={(e) => {
+                            updateSIB(e!!)
+                        }}
+                    />
                 </Form.Item>
+
                 <Form.Item label="公积金基数">
-                    <Checkbox className="input-checkbox" checked={enableCustomHPFB} onChange={e => {
-                        setEnableCustomHPFB(e.target.checked)
-                        if (!e.target.checked) {
-                            setHPFB(hpfbCalculate(salary, cityPolicy))
-                        }
-                    }} />
-                    <InputNumber className="input-number" disabled={!enableCustomHPFB} value={hpfb}
-                                 onChange={(e) => setHPFB(e)} />
+                    <Checkbox
+                        className="input-checkbox"
+                        checked={hpfb.enabled}
+                        onChange={(e) => {
+                            toggleHPFB(e.target.checked)
+                        }}
+                    />
+                    <InputNumber
+                        step={100}
+                        className="input-number"
+                        disabled={!hpfb.enabled}
+                        value={hpfb.value}
+                        onChange={(e) => updateHPFB(e!!)}
+                    />
                 </Form.Item>
                 <Form.Item label="年终奖">
-                    <InputNumber value={oneOffBonus} onChange={(e) => setOneOffBonus(e)} />
+                    <InputNumber
+                        value={salaryInput.oneOffBonus}
+                        onChange={(e) => {
+                            updateSalaryInput({ oneOffBonus: e!! })
+                        }}
+                    />
                 </Form.Item>
                 <Form.Item label="年终奖计税方式">
-                    <Radio.Group onChange={e => {
-                        setOneOffBonusType(e.target.value)
-                    }
-                    } value={oneOffBonusType}>
+                    <Radio.Group
+                        onChange={(e) => {
+                            updateSalaryInput({ oneOffBonusType: e.target.value })
+                        }}
+                        value={salaryInput.oneOffBonusType}>
                         <Space direction="vertical">
                             <Radio value={0}>合并计税</Radio>
                             <Radio value={1}>单独计税</Radio>
@@ -165,7 +168,9 @@ export const SalaryInput = () => {
                 <p>专项扣除</p>
                 {rows}
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" />
+                    <Button type="primary" htmlType="submit">
+                        提交
+                    </Button>
                 </Form.Item>
             </Form>
         </div>

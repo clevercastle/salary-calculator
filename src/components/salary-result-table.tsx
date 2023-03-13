@@ -6,17 +6,16 @@ import { ColumnsType } from "antd/es/table"
 import NP from "number-precision"
 
 interface DataType {
-    key: React.Key,
-    name: string,
-    user: number,
-    company: number | null,
+    key: React.Key
+    name: string
+    user: number
+    company: number | null
     all: number | null
 }
 
 
 export const SalaryResultTable = () => {
     const {
-        salary,
         salaryResult
     } = useSalary() as SalaryContextType
 
@@ -96,24 +95,43 @@ export const SalaryResultTable = () => {
         company: NP.round(salaryResult.workInjuryCompany, 2),
         all: NP.round(NP.plus(salaryResult.workInjuryUser, salaryResult.workInjuryCompany), 2)
     })
-    const sibHpfAllUser = NP.round(NP.plus(salaryResult.hpfUser, salaryResult.endowmentUser, salaryResult.medicalUser, salaryResult.unemploymentUser,
-        salaryResult.maternityUser, salaryResult.workInjuryUser), 2)
-    const sibHpfAllCompany = NP.round(NP.plus(salaryResult.hpfCompany, salaryResult.endowmentCompany, salaryResult.medicalCompany, salaryResult.unemploymentCompany,
-        salaryResult.maternityCompany, salaryResult.workInjuryCompany), 2)
+    const sibHpfAllUser = NP.round(
+        NP.plus(
+            salaryResult.hpfUser,
+            salaryResult.endowmentUser,
+            salaryResult.medicalUser,
+            salaryResult.unemploymentUser,
+            salaryResult.maternityUser,
+            salaryResult.workInjuryUser
+        ),
+        2
+    )
+    const sibHpfAllCompany = NP.round(
+        NP.plus(
+            salaryResult.hpfCompany,
+            salaryResult.endowmentCompany,
+            salaryResult.medicalCompany,
+            salaryResult.unemploymentCompany,
+            salaryResult.maternityCompany,
+            salaryResult.workInjuryCompany
+        ),
+        2
+    )
     data.push({
         key: "sib-hpfb-all",
         name: "五险一金总支出",
         user: sibHpfAllUser,
         company: sibHpfAllCompany,
-        all: NP.round(NP.plus(sibHpfAllUser, sibHpfAllCompany), 2)
+        all: NP.round(NP.plus(sibHpfAllUser, sibHpfAllCompany), 2),
     })
-    const salaryMinusSibHpfbAll = NP.minus(salary, sibHpfAllUser)
+    // todo
+    const salaryMinusSibHpfbAll = NP.minus(sibHpfAllCompany, sibHpfAllUser)
     data.push({
         key: "salary-minus-sib-hpfb-all",
         name: "扣除五险一金薪水",
         user: NP.round(salaryMinusSibHpfbAll, 2),
         company: null,
-        all: null
+        all: null,
     })
     console.log(salaryMinusSibHpfbAll)
     let tax = 0
@@ -209,11 +227,6 @@ export const SalaryResultTable = () => {
             all: null
         })
     }
-
-    if (1 === salaryResult.oneOffBonusType) {
-
-    }
-
     return (
         <Table columns={columns} dataSource={data} pagination={{ hideOnSinglePage: true }} />
     )

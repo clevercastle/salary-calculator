@@ -1,5 +1,33 @@
 import { CityPolicy } from "./city-config"
+import { OneOffBonusType } from "./state/salary.state"
 
+export interface SalaryInputType {
+    salary: number
+    oneOffBonus: number
+    oneOffBonusType: OneOffBonusType
+    sib: number // social insurance base
+    enableCustomSIB: boolean
+    hpfb: number // housing provider fund base
+    enableCustomHPFB: boolean
+    cityPolicy: CityPolicy
+}
+
+export interface SalaryInputAdvance {
+    childEducation: number
+    enableChildEducation: boolean
+    continuingEducation: number
+    enableContinuingEducation: boolean
+    seriousDiseases: number
+    enableSeriousDiseases: boolean
+    housingLoanInterest: number
+    enableHousingLoanInterest: boolean
+    housingRent: number
+    enableHousingRent: boolean
+    elderSupport: number
+    enableElderSupport: boolean
+    babyCare: number
+    enableBabyCare: boolean
+}
 
 // endowment insurance
 // medical insurance
@@ -21,24 +49,33 @@ export interface SalaryResultType {
     hpfUser: number
     hpfCompany: number
 
+    oneOffBonus: number
+    oneOffBonusType: number
+
+    childEducation: number
+    continuingEducation: number
+    seriousDiseases: number
+    housingLoanInterest: number
+    housingRent: number
+    elderSupport: number
+    babyCare: number
+}
+
+export const calculateSalary = (
+    salary: number,
+    sib: number,
+    hpfb: number,
+    cityPolicy: CityPolicy,
     oneOffBonus: number,
     oneOffBonusType: number,
-
     childEducation: number,
     continuingEducation: number,
     seriousDiseases: number,
     housingLoanInterest: number,
     housingRent: number,
     elderSupport: number,
-    babyCare: number,
-}
-
-
-export const calculateSalary = (salary: number, sib: number, hpfb: number, cityPolicy: CityPolicy,
-                                oneOffBonus: number, oneOffBonusType: number,
-                                childEducation: number, continuingEducation: number, seriousDiseases: number,
-                                housingLoanInterest: number, housingRent: number, elderSupport: number,
-                                babyCare: number) => {
+    babyCare: number
+) => {
     const salaryResult: SalaryResultType = {
         endowmentUser: sib * cityPolicy.endowmentUserRate,
         endowmentCompany: sib * cityPolicy.endowmentCompanyRate,
@@ -62,7 +99,7 @@ export const calculateSalary = (salary: number, sib: number, hpfb: number, cityP
         housingLoanInterest: housingLoanInterest,
         housingRent: housingRent,
         elderSupport: elderSupport,
-        babyCare: babyCare
+        babyCare: babyCare,
     }
     return salaryResult
 }
