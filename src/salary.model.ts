@@ -20,10 +20,25 @@ export interface SalaryResultType {
     maternityCompany: number
     hpfUser: number
     hpfCompany: number
+
+    oneOffBonus: number,
+    oneOffBonusType: number,
+
+    childEducation: number,
+    continuingEducation: number,
+    seriousDiseases: number,
+    housingLoanInterest: number,
+    housingRent: number,
+    elderSupport: number,
+    babyCare: number,
 }
 
 
-export const calculateSalary = (salary: number, sib: number, hpfb: number, oneOffBonus: number, cityPolicy: CityPolicy) => {
+export const calculateSalary = (salary: number, sib: number, hpfb: number, cityPolicy: CityPolicy,
+                                oneOffBonus: number, oneOffBonusType: number,
+                                childEducation: number, continuingEducation: number, seriousDiseases: number,
+                                housingLoanInterest: number, housingRent: number, elderSupport: number,
+                                babyCare: number) => {
     const salaryResult: SalaryResultType = {
         endowmentUser: sib * cityPolicy.endowmentUserRate,
         endowmentCompany: sib * cityPolicy.endowmentCompanyRate,
@@ -36,7 +51,18 @@ export const calculateSalary = (salary: number, sib: number, hpfb: number, oneOf
         maternityUser: sib * cityPolicy.maternityUserRate,
         maternityCompany: sib * cityPolicy.maternityCompanyRate,
         hpfUser: hpfb * cityPolicy.hpfUserRate,
-        hpfCompany: hpfb * cityPolicy.hpfCompanyRate
+        hpfCompany: hpfb * cityPolicy.hpfCompanyRate,
+
+        oneOffBonus: oneOffBonus,
+        oneOffBonusType: oneOffBonusType,
+
+        childEducation: childEducation,
+        continuingEducation: continuingEducation,
+        seriousDiseases: seriousDiseases,
+        housingLoanInterest: housingLoanInterest,
+        housingRent: housingRent,
+        elderSupport: elderSupport,
+        babyCare: babyCare
     }
     return salaryResult
 }

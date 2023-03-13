@@ -69,7 +69,7 @@ export const SalaryResultTable = () => {
         all: NP.round(NP.plus(salaryResult.endowmentUser, salaryResult.endowmentCompany), 2)
     })
     data.push({
-        key: "endowment",
+        key: "medical",
         name: "医疗保险",
         user: NP.round(salaryResult.medicalUser, 2),
         company: NP.round(salaryResult.medicalCompany, 2),
@@ -115,9 +115,20 @@ export const SalaryResultTable = () => {
         company: null,
         all: null
     })
+    console.log(salaryMinusSibHpfbAll)
     let tax = 0
+
     let yearTaxSalary = NP.minus(NP.times(salaryMinusSibHpfbAll, 12), 60000)
-    if (yearTaxSalary <= 36000) {
+    console.log(salaryResult.oneOffBonusType)
+    console.log(yearTaxSalary)
+    if (salaryResult.oneOffBonusType === 0) {
+        console.log("年终奖")
+        yearTaxSalary = NP.minus(NP.plus(NP.times(salaryMinusSibHpfbAll, 12), salaryResult.oneOffBonus), 60000)
+        console.log(yearTaxSalary)
+    }
+    if (yearTaxSalary <= 0) {
+        tax = 0
+    } else if (yearTaxSalary <= 36000) {
         tax = NP.round(NP.times(yearTaxSalary, 0.03), 2)
     } else if (yearTaxSalary <= 144000) {
         tax = NP.round(NP.minus(NP.times(yearTaxSalary, 0.1), 2520), 2)
@@ -140,13 +151,68 @@ export const SalaryResultTable = () => {
         company: null,
         all: null
     })
-    data.push({
-        key: "tax",
-        name: "税后月薪",
-        user: NP.round(NP.minus(salaryMinusSibHpfbAll, NP.divide(tax, 12)), 2),
-        company: null,
-        all: null
-    })
+
+    let oneOffBonusTax = 0
+    if (1 === salaryResult.oneOffBonusType) {
+        if (salaryResult.oneOffBonus <= 36000) {
+            oneOffBonusTax = NP.round(NP.times(salaryResult.oneOffBonus, 0.03), 2)
+        } else if (salaryResult.oneOffBonus <= 144000) {
+            oneOffBonusTax = NP.round(NP.minus(NP.times(salaryResult.oneOffBonus, 0.1), 2520), 2)
+        } else if (salaryResult.oneOffBonus <= 300000) {
+            oneOffBonusTax = NP.round(NP.minus(NP.times(salaryResult.oneOffBonus, 0.2), 16920), 2)
+        } else if (salaryResult.oneOffBonus <= 420000) {
+            oneOffBonusTax = NP.round(NP.minus(NP.times(salaryResult.oneOffBonus, 0.25), 31920), 2)
+        } else if (salaryResult.oneOffBonus <= 660000) {
+            oneOffBonusTax = NP.round(NP.minus(NP.times(salaryResult.oneOffBonus, 0.30), 52920), 2)
+        } else if (salaryResult.oneOffBonus <= 960000) {
+            oneOffBonusTax = NP.round(NP.minus(NP.times(salaryResult.oneOffBonus, 0.35), 85920), 2)
+        } else if (salaryResult.oneOffBonus > 960000) {
+            oneOffBonusTax = NP.round(NP.minus(NP.times(salaryResult.oneOffBonus, 0.45), 181920), 2)
+        }
+    }
+
+    if (0 === salaryResult.oneOffBonusType) {
+        data.push({
+            key: "salary",
+            name: "税后月薪",
+            user: NP.round(NP.minus(NP.plus(salaryMinusSibHpfbAll, NP.divide(salaryResult.oneOffBonus, 12)), NP.divide(tax, 12)), 2),
+            company: null,
+            all: null
+        })
+        data.push({
+            key: "yearIncome",
+            name: "全年收入",
+            user: NP.round(NP.minus(NP.plus(NP.times(salaryMinusSibHpfbAll, 12), salaryResult.oneOffBonus), tax), 2),
+            company: null,
+            all: null
+        })
+    } else {
+        data.push({
+            key: "salary",
+            name: "税后月薪",
+            user: NP.round(NP.minus(salaryMinusSibHpfbAll, NP.divide(tax, 12)), 2),
+            company: null,
+            all: null
+        })
+        data.push({
+            key: "oneOffBonus",
+            name: "全年一次性奖金",
+            user: NP.round(NP.minus(salaryResult.oneOffBonus, oneOffBonusTax), 2),
+            company: null,
+            all: null
+        })
+        data.push({
+            key: "yearIncome",
+            name: "全年收入",
+            user: NP.round(NP.plus(NP.times(salaryMinusSibHpfbAll, 12), NP.minus(salaryResult.oneOffBonus, oneOffBonusTax)), 2),
+            company: null,
+            all: null
+        })
+    }
+
+    if (1 === salaryResult.oneOffBonusType) {
+
+    }
 
     return (
         <Table columns={columns} dataSource={data} pagination={{ hideOnSinglePage: true }} />
