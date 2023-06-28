@@ -1,4 +1,4 @@
-import { CityPolicy } from "./city-config"
+import { CityPolicy } from "city-config"
 
 export const sibCalculate = (salary: number, cityPolicy: CityPolicy) => {
     if (salary > cityPolicy.sibMax) {

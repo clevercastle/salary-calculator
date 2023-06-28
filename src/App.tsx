@@ -1,8 +1,8 @@
 import React from "react"
 import "./App.css"
 // import { SalaryInput } from "./components/salary-input"
-import { SalaryInput } from "./components/salary-input"
-import { RegionSelect } from "./components/region-select"
+import { RegionSelect } from "components/region-select"
+import { SalaryInput } from "components/salary-input"
 
 function App() {
     return (

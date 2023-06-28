@@ -1,8 +1,8 @@
 import React from "react"
-import { useCombine } from "../util/input"
 import { Button, Checkbox, Form, InputNumber, Radio, Space } from "antd"
-import { hpfbCalculate, sibCalculate } from "../util"
-import { useSalary } from "../provider/salary-provider"
+import { useSalary } from "provider/salary-provider"
+import { useCombine } from "util/input"
+import { hpfbCalculate, sibCalculate } from "utils"
 
 export const SalaryInput = () => {
     const { cityPolicy, salaryInput, updateSalaryInput, salaryInputAdvance, updateSalaryInputAdvance } = useSalary()

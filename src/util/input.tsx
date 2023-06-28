@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { CityPolicy } from "../city-config"
+import { CityPolicy } from "city-config"
 
 interface Combine {
     value: number

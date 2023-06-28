@@ -1,5 +1,5 @@
-import { CityPolicy } from "./city-config"
-import { OneOffBonusType } from "./state/salary.state"
+import { CityPolicy } from "city-config"
+import { OneOffBonusType } from "state/salary.state"
 
 export interface SalaryInputType {
     salary: number

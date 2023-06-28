@@ -1,8 +1,8 @@
 import * as React from "react"
 import { createContext, useContext, useState } from "react"
-import { city_polices, CityPolicy, default_city_policy } from "../city-config"
-import { OneOffBonusType, SalaryContextType } from "../state/salary.state"
-import { SalaryInputAdvance, SalaryInputType, SalaryResultType } from "../salary.model"
+import { city_polices, CityPolicy, default_city_policy } from "city-config"
+import { OneOffBonusType, SalaryContextType } from "state/salary.state"
+import { SalaryInputAdvance, SalaryInputType, SalaryResultType } from "salary.model"
 
 const SalaryContext = createContext<SalaryContextType | undefined>(undefined)
 export const useSalary = () => useContext<SalaryContextType | undefined>(SalaryContext) as SalaryContextType

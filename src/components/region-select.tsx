@@ -1,8 +1,8 @@
 import React from "react"
 
 import { Cascader, Form } from "antd"
-import { support_cities } from "../city"
-import { useSalary } from "../provider/salary-provider"
+import { support_cities } from "city"
+import { useSalary } from "provider/salary-provider"
 
 export const RegionSelect = () => {
     const { region, setRegion } = useSalary()
