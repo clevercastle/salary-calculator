@@ -1,12 +1,21 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React, { useState } from "react"
 import { CityPolicy } from "city-config"
+import { SalaryInputType } from "salary.model"
+import { isValid } from "utils"
 
 interface Combine {
     value: number
     enabled: boolean
 }
 
-export const useCombine = (salary: number, cityPolicy: CityPolicy, calc: (n: number, p: CityPolicy) => number) => {
+export const useCombine = (
+    salary: number,
+    cityPolicy: CityPolicy,
+    calc: (n: number, p: CityPolicy) => number,
+    updateSalaryInput: (newData: Partial<SalaryInputType>) => void,
+    updateSalaryInputHint: Partial<SalaryInputType>
+) => {
     const [combine, setCombine] = useState<Combine>({
         value: calc(salary, cityPolicy),
         enabled: false,
@@ -18,10 +27,7 @@ export const useCombine = (salary: number, cityPolicy: CityPolicy, calc: (n: num
             enabled: b,
         }))
         if (!b) {
-            setCombine((prevCombine) => ({
-                ...prevCombine,
-                value: calc(salary, cityPolicy),
-            }))
+            updateValue(calc(salary, cityPolicy))
         }
     }
 
@@ -30,6 +36,12 @@ export const useCombine = (salary: number, cityPolicy: CityPolicy, calc: (n: num
             ...prevCombine,
             value: num,
         }))
+        const { sib, hpfb } = updateSalaryInputHint
+        if (isValid(sib)) {
+            updateSalaryInput({ sib: num })
+        } else if (isValid(hpfb)) {
+            updateSalaryInput({ hpfb: num })
+        }
     }
 
     return {

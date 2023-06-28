@@ -1,5 +1,5 @@
-import { CityPolicy } from "city-config"
 import { OneOffBonusType } from "state/salary.state"
+import { CityPolicy } from "city-config"
 
 export interface SalaryInputType {
     salary: number
@@ -36,6 +36,7 @@ export interface SalaryInputAdvance {
 // maternity insurance
 // housing provident fund
 export interface SalaryResultType {
+    salary: number
     endowmentUser: number
     endowmentCompany: number
     medicalUser: number
@@ -62,44 +63,35 @@ export interface SalaryResultType {
 }
 
 export const calculateSalary = (
-    salary: number,
-    sib: number,
-    hpfb: number,
-    cityPolicy: CityPolicy,
-    oneOffBonus: number,
-    oneOffBonusType: number,
-    childEducation: number,
-    continuingEducation: number,
-    seriousDiseases: number,
-    housingLoanInterest: number,
-    housingRent: number,
-    elderSupport: number,
-    babyCare: number
+    salaryInput: SalaryInputType,
+    salaryInputAdvance: SalaryInputAdvance,
+    cityPolicy: CityPolicy
 ) => {
     const salaryResult: SalaryResultType = {
-        endowmentUser: sib * cityPolicy.endowmentUserRate,
-        endowmentCompany: sib * cityPolicy.endowmentCompanyRate,
-        medicalUser: sib * cityPolicy.medicalUserRate,
-        medicalCompany: sib * cityPolicy.medicalCompanyRate,
-        unemploymentUser: sib * cityPolicy.unemploymentUserRate,
-        unemploymentCompany: sib * cityPolicy.unemploymentCompanyRate,
-        workInjuryUser: sib * cityPolicy.workInjuryUserRate,
-        workInjuryCompany: sib * cityPolicy.workInjuryCompanyRate,
-        maternityUser: sib * cityPolicy.maternityUserRate,
-        maternityCompany: sib * cityPolicy.maternityCompanyRate,
-        hpfUser: hpfb * cityPolicy.hpfUserRate,
-        hpfCompany: hpfb * cityPolicy.hpfCompanyRate,
+        salary: salaryInput.salary,
+        endowmentUser: salaryInput.sib * cityPolicy.endowmentUserRate,
+        endowmentCompany: salaryInput.sib * cityPolicy.endowmentCompanyRate,
+        medicalUser: salaryInput.sib * cityPolicy.medicalUserRate,
+        medicalCompany: salaryInput.sib * cityPolicy.medicalCompanyRate,
+        unemploymentUser: salaryInput.sib * cityPolicy.unemploymentUserRate,
+        unemploymentCompany: salaryInput.sib * cityPolicy.unemploymentCompanyRate,
+        workInjuryUser: salaryInput.sib * cityPolicy.workInjuryUserRate,
+        workInjuryCompany: salaryInput.sib * cityPolicy.workInjuryCompanyRate,
+        maternityUser: salaryInput.sib * cityPolicy.maternityUserRate,
+        maternityCompany: salaryInput.sib * cityPolicy.maternityCompanyRate,
+        hpfUser: salaryInput.hpfb * cityPolicy.hpfUserRate,
+        hpfCompany: salaryInput.hpfb * cityPolicy.hpfCompanyRate,
 
-        oneOffBonus: oneOffBonus,
-        oneOffBonusType: oneOffBonusType,
+        oneOffBonus: salaryInput.oneOffBonus,
+        oneOffBonusType: salaryInput.oneOffBonusType,
 
-        childEducation: childEducation,
-        continuingEducation: continuingEducation,
-        seriousDiseases: seriousDiseases,
-        housingLoanInterest: housingLoanInterest,
-        housingRent: housingRent,
-        elderSupport: elderSupport,
-        babyCare: babyCare,
+        childEducation: salaryInputAdvance.childEducation,
+        continuingEducation: salaryInputAdvance.continuingEducation,
+        seriousDiseases: salaryInputAdvance.seriousDiseases,
+        housingLoanInterest: salaryInputAdvance.housingLoanInterest,
+        housingRent: salaryInputAdvance.housingRent,
+        elderSupport: salaryInputAdvance.elderSupport,
+        babyCare: salaryInputAdvance.babyCare,
     }
     return salaryResult
 }

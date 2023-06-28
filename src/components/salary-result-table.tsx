@@ -1,6 +1,6 @@
+import React from "react"
 import { useSalary } from "provider/salary-provider"
 import { SalaryContextType } from "state/salary.state"
-import React from "react"
 import { Table } from "antd"
 import { ColumnsType } from "antd/es/table"
 import NP from "number-precision"
@@ -120,7 +120,7 @@ export const SalaryResultTable = () => {
         all: NP.round(NP.plus(sibHpfAllUser, sibHpfAllCompany), 2),
     })
     // todo
-    const salaryMinusSibHpfbAll = NP.minus(sibHpfAllCompany, sibHpfAllUser)
+    const salaryMinusSibHpfbAll = NP.minus(salaryResult.salary, sibHpfAllUser)
     data.push({
         key: "salary-minus-sib-hpfb-all",
         name: "扣除五险一金薪水",
@@ -228,5 +228,5 @@ export const SalaryResultTable = () => {
             all: null,
         })
     }
-    return <Table columns={columns} dataSource={data} pagination={{ hideOnSinglePage: true }} />
+    return (<Table columns={columns} dataSource={data} pagination={{ hideOnSinglePage: true }} />)
 }

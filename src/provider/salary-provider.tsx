@@ -2,7 +2,7 @@ import * as React from "react"
 import { createContext, useContext, useState } from "react"
 import { city_polices, CityPolicy, default_city_policy } from "city-config"
 import { OneOffBonusType, SalaryContextType } from "state/salary.state"
-import { SalaryInputAdvance, SalaryInputType, SalaryResultType } from "salary.model"
+import { calculateSalary, SalaryInputAdvance, SalaryInputType, SalaryResultType } from "salary.model"
 
 const SalaryContext = createContext<SalaryContextType | undefined>(undefined)
 export const useSalary = () => useContext<SalaryContextType | undefined>(SalaryContext) as SalaryContextType
@@ -18,8 +18,8 @@ export const SalaryProvider = ({ children }) => {
         sib: 0, // social insurance base
         enableCustomHPFB: true,
         hpfb: 0, // housing provider fund base
-        cityPolicy: cityPolicy,
-        oneOffBonusType: OneOffBonusType.combine,
+        cityPolicy: default_city_policy,
+        oneOffBonusType: OneOffBonusType.combine
     })
     const [salaryInputAdvance, setSalaryInputAdvance] = useState<SalaryInputAdvance>({
         babyCare: 0,
@@ -35,9 +35,10 @@ export const SalaryProvider = ({ children }) => {
         enableSeriousDiseases: false,
         housingLoanInterest: 0,
         housingRent: 0,
-        seriousDiseases: 0,
+        seriousDiseases: 0
     })
     const [salaryResult, setSalaryResult] = useState<SalaryResultType>({
+        salary: 0,
         endowmentUser: 0,
         endowmentCompany: 0,
         medicalUser: 0,
@@ -58,7 +59,7 @@ export const SalaryProvider = ({ children }) => {
         housingLoanInterest: 0,
         housingRent: 0,
         elderSupport: 0,
-        babyCare: 0,
+        babyCare: 0
     })
 
     const updateSalaryInput = (newData: Partial<SalaryInputType>) => {
@@ -85,6 +86,16 @@ export const SalaryProvider = ({ children }) => {
         }
     }
 
+    const showSalaryResult = () => {
+        console.log("showSalaryResult")
+        const result = calculateSalary(salaryInput, salaryInputAdvance, cityPolicy)
+        console.log(result)
+        console.log(salaryInput)
+        console.log(salaryInputAdvance)
+        console.log(cityPolicy)
+        setSalaryResult(result)
+    }
+
     return (
         <SalaryContext.Provider
             value={{
@@ -98,6 +109,7 @@ export const SalaryProvider = ({ children }) => {
                 updateSalaryInputAdvance,
                 updateSalaryResult,
                 setCityPolicy,
+                showSalaryResult
             }}>
             {children}
         </SalaryContext.Provider>

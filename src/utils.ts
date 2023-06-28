@@ -19,3 +19,7 @@ export const hpfbCalculate = (salary: number, cityPolicy: CityPolicy) => {
     }
     return salary
 }
+
+export const isFalsy = (value: unknown) => (value === 0 ? false : !value)
+
+export const isValid = (value: unknown) => !(value === undefined || value === null || value === "")

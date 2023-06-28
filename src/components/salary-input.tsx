@@ -5,17 +5,24 @@ import { useCombine } from "util/input"
 import { hpfbCalculate, sibCalculate } from "utils"
 
 export const SalaryInput = () => {
-    const { cityPolicy, salaryInput, updateSalaryInput, salaryInputAdvance, updateSalaryInputAdvance } = useSalary()
+    const {
+        cityPolicy,
+        salaryInput,
+        updateSalaryInput,
+        salaryInputAdvance,
+        updateSalaryInputAdvance,
+        showSalaryResult,
+    } = useSalary()
     const {
         combine: sib,
         toggle: toggleSIB,
         updateNumber: updateSIB,
-    } = useCombine(salaryInput.salary, cityPolicy, sibCalculate)
+    } = useCombine(salaryInput.salary, cityPolicy, sibCalculate, updateSalaryInput, { sib: 0 })
     const {
         combine: hpfb,
         toggle: toggleHPFB,
         updateNumber: updateHPFB,
-    } = useCombine(salaryInput.salary, cityPolicy, hpfbCalculate)
+    } = useCombine(salaryInput.salary, cityPolicy, hpfbCalculate, updateSalaryInput, { hpfb: 0 })
 
     const list = [
         {
@@ -94,7 +101,7 @@ export const SalaryInput = () => {
 
     return (
         <div>
-            <Form className="input-form">
+            <Form className="input-form" onSubmitCapture={showSalaryResult}>
                 <Form.Item label="薪水" rules={[{ required: true, message: "必填" }]}>
                     <InputNumber
                         step={100}

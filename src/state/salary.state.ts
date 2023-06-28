@@ -12,6 +12,7 @@ export interface SalaryContextType {
     updateSalaryInputAdvance: (newData: Partial<SalaryInputAdvance>) => void
     updateSalaryResult: (newData: Partial<SalaryResultType>) => void
     setCityPolicy: (newData: CityPolicy) => void
+    showSalaryResult: () => void
 }
 
 export enum OneOffBonusType {

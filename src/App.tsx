@@ -1,8 +1,8 @@
 import React from "react"
-import "./App.css"
-// import { SalaryInput } from "./components/salary-input"
+import "App.css"
 import { RegionSelect } from "components/region-select"
 import { SalaryInput } from "components/salary-input"
+import { SalaryResultTable } from "components/salary-result-table"
 
 function App() {
     return (
@@ -10,10 +10,8 @@ function App() {
             <div className="input">
                 <RegionSelect />
                 <SalaryInput />
-                {/*<Test/>*/}
-                {/*<CombineUI/>*/}
             </div>
-            <div className="result-table">{/*<SalaryResultTable />*/}</div>
+            <div className="result-table">{<SalaryResultTable />}</div>
             <div className="result-graph"></div>
         </div>
     )
