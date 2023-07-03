@@ -1,29 +1,17 @@
 import React from "react"
 import { Button, Checkbox, Form, InputNumber, Radio, Space } from "antd"
 import { useSalary } from "provider/salary-provider"
-import { useCombine } from "util/input"
-import { hpfbCalculate, sibCalculate } from "utils"
 
 export const SalaryInput = () => {
     const {
-        cityPolicy,
         salaryInput,
         updateSalaryInput,
         salaryInputAdvance,
         updateSalaryInputAdvance,
         showSalaryResult,
+        toggleEnableCustomerSIB,
+        toggleEnableCustomerHPFB,
     } = useSalary()
-    const {
-        combine: sib,
-        toggle: toggleSIB,
-        updateNumber: updateSIB,
-    } = useCombine(salaryInput.salary, cityPolicy, sibCalculate, updateSalaryInput, { sib: 0 })
-    const {
-        combine: hpfb,
-        toggle: toggleHPFB,
-        updateNumber: updateHPFB,
-    } = useCombine(salaryInput.salary, cityPolicy, hpfbCalculate, updateSalaryInput, { hpfb: 0 })
-
     const list = [
         {
             key: "childEducation",
@@ -107,12 +95,6 @@ export const SalaryInput = () => {
                         step={100}
                         value={salaryInput.salary}
                         onChange={(e) => {
-                            if (!sib.enabled) {
-                                updateSIB(sibCalculate(e!!, cityPolicy))
-                            }
-                            if (!hpfb.enabled) {
-                                updateHPFB(hpfbCalculate(e!!, cityPolicy))
-                            }
                             updateSalaryInput({ salary: e!! })
                         }}
                     />
@@ -120,18 +102,18 @@ export const SalaryInput = () => {
                 <Form.Item label="社保基数">
                     <Checkbox
                         className="input-checkbox"
-                        checked={sib.enabled}
+                        checked={salaryInput.enableCustomSIB}
                         onChange={(e) => {
-                            toggleSIB(e.target.checked)
+                            toggleEnableCustomerSIB(e.target.checked)
                         }}
                     />
                     <InputNumber
                         step={100}
                         className="input-number"
-                        disabled={!sib.enabled}
-                        value={sib.value}
+                        disabled={!salaryInput.enableCustomSIB}
+                        value={salaryInput.sib}
                         onChange={(e) => {
-                            updateSIB(e!!)
+                            updateSalaryInput({ sib: e!! })
                         }}
                     />
                 </Form.Item>
@@ -139,17 +121,17 @@ export const SalaryInput = () => {
                 <Form.Item label="公积金基数">
                     <Checkbox
                         className="input-checkbox"
-                        checked={hpfb.enabled}
+                        checked={salaryInput.enableCustomHPFB}
                         onChange={(e) => {
-                            toggleHPFB(e.target.checked)
+                            toggleEnableCustomerHPFB(e.target.checked)
                         }}
                     />
                     <InputNumber
                         step={100}
                         className="input-number"
-                        disabled={!hpfb.enabled}
-                        value={hpfb.value}
-                        onChange={(e) => updateHPFB(e!!)}
+                        disabled={!salaryInput.enableCustomHPFB}
+                        value={salaryInput.hpfb}
+                        onChange={(e) => updateSalaryInput({ hpfb: e!! })}
                     />
                 </Form.Item>
                 <Form.Item label="年终奖">
@@ -176,7 +158,7 @@ export const SalaryInput = () => {
                 {rows}
                 <Form.Item>
                     <Button type="primary" htmlType="submit">
-                        提交
+                        计算
                     </Button>
                 </Form.Item>
             </Form>

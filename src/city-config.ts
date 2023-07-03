@@ -1,4 +1,5 @@
 export interface CityPolicy {
+    region: string
     sibMin: number
     sibMax: number
     hpfbMin: number
@@ -16,10 +17,10 @@ export interface CityPolicy {
     maternityCompanyRate: number
     hpfUserRate: number
     hpfCompanyRate: number
-
 }
 
 export const default_city_policy: CityPolicy = {
+    region: "beijing",
     sibMin: 6377,
     sibMax: 31884,
     hpfbMin: 2320,
@@ -35,13 +36,13 @@ export const default_city_policy: CityPolicy = {
     maternityUserRate: 0,
     maternityCompanyRate: 0,
     hpfUserRate: 0.12,
-    hpfCompanyRate: 0.12
+    hpfCompanyRate: 0.12,
 }
 
 export const city_polices = new Map<string, CityPolicy>()
 
-
 city_polices.set("beijing", {
+    region: "beijing",
     sibMin: 5869,
     sibMax: 31884,
     hpfbMin: 2320,
@@ -57,10 +58,11 @@ city_polices.set("beijing", {
     maternityUserRate: 0,
     maternityCompanyRate: 0,
     hpfUserRate: 0.12,
-    hpfCompanyRate: 0.12
+    hpfCompanyRate: 0.12,
 })
 
 city_polices.set("shanghai", {
+    region: "shanghai",
     sibMin: 6837,
     sibMax: 34188,
     hpfbMin: 2590,
@@ -76,10 +78,11 @@ city_polices.set("shanghai", {
     maternityUserRate: 0,
     maternityCompanyRate: 0,
     hpfUserRate: 0.07,
-    hpfCompanyRate: 0.07
+    hpfCompanyRate: 0.07,
 })
 
 city_polices.set("hangzhou", {
+    region: "hangzhou",
     sibMin: 3957,
     sibMax: 19783,
     hpfbMin: 2280,
@@ -95,10 +98,11 @@ city_polices.set("hangzhou", {
     maternityUserRate: 0,
     maternityCompanyRate: 0.006,
     hpfUserRate: 0.12,
-    hpfCompanyRate: 0.12
+    hpfCompanyRate: 0.12,
 })
 
 city_polices.set("nanjing", {
+    region: "nanjing",
     sibMin: 4250,
     sibMax: 22470,
     hpfbMin: 2280,
@@ -114,5 +118,5 @@ city_polices.set("nanjing", {
     maternityUserRate: 0,
     maternityCompanyRate: 0.008,
     hpfUserRate: 0.08,
-    hpfCompanyRate: 0.08
+    hpfCompanyRate: 0.08,
 })

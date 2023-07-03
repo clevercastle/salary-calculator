@@ -1,8 +1,9 @@
 import * as React from "react"
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 import { city_polices, CityPolicy, default_city_policy } from "city-config"
 import { OneOffBonusType, SalaryContextType } from "state/salary.state"
 import { calculateSalary, SalaryInputAdvance, SalaryInputType, SalaryResultType } from "salary.model"
+import { hpfbCalculate, sibCalculate } from "utils"
 
 const SalaryContext = createContext<SalaryContextType | undefined>(undefined)
 export const useSalary = () => useContext<SalaryContextType | undefined>(SalaryContext) as SalaryContextType
@@ -14,13 +15,14 @@ export const SalaryProvider = ({ children }) => {
     const [salaryInput, setSalaryInput] = useState<SalaryInputType>({
         salary: 0,
         oneOffBonus: 0,
-        enableCustomSIB: true,
-        sib: 0, // social insurance base
-        enableCustomHPFB: true,
-        hpfb: 0, // housing provider fund base
+        enableCustomSIB: false,
+        sib: cityPolicy.sibMin, // social insurance base
+        enableCustomHPFB: false,
+        hpfb: cityPolicy.hpfbMin, // housing provider fund base
         cityPolicy: default_city_policy,
-        oneOffBonusType: OneOffBonusType.combine
+        oneOffBonusType: OneOffBonusType.combine,
     })
+
     const [salaryInputAdvance, setSalaryInputAdvance] = useState<SalaryInputAdvance>({
         babyCare: 0,
         childEducation: 0,
@@ -35,7 +37,7 @@ export const SalaryProvider = ({ children }) => {
         enableSeriousDiseases: false,
         housingLoanInterest: 0,
         housingRent: 0,
-        seriousDiseases: 0
+        seriousDiseases: 0,
     })
     const [salaryResult, setSalaryResult] = useState<SalaryResultType>({
         salary: 0,
@@ -59,23 +61,47 @@ export const SalaryProvider = ({ children }) => {
         housingLoanInterest: 0,
         housingRent: 0,
         elderSupport: 0,
-        babyCare: 0
+        babyCare: 0,
     })
 
+    useEffect(() => {
+        if (!salaryInput.enableCustomSIB) {
+            updateSalaryInput({ sib: sibCalculate(salaryInput.salary, cityPolicy) })
+        }
+        if (!salaryInput.enableCustomHPFB) {
+            updateSalaryInput({ hpfb: hpfbCalculate(salaryInput.salary, cityPolicy) })
+        }
+    }, [cityPolicy])
+
+    useEffect(() => {
+        if (!salaryInput.enableCustomSIB) {
+            updateSalaryInput({ sib: sibCalculate(salaryInput.salary, cityPolicy) })
+        } else {
+            updateSalaryInput({ sib: salaryInput.sib })
+        }
+    }, [salaryInput.salary, cityPolicy, salaryInput.enableCustomSIB])
+
+    useEffect(() => {
+        if (!salaryInput.enableCustomHPFB) {
+            updateSalaryInput({ hpfb: hpfbCalculate(salaryInput.salary, cityPolicy) })
+        } else {
+            updateSalaryInput({ hpfb: salaryInput.hpfb })
+        }
+    }, [salaryInput.salary, cityPolicy, salaryInput.enableCustomHPFB])
+
     const updateSalaryInput = (newData: Partial<SalaryInputType>) => {
-        setSalaryInput({ ...salaryInput, ...newData })
+        setSalaryInput((prev) => ({ ...prev, ...newData }))
     }
 
     const updateSalaryInputAdvance = (newData: Partial<SalaryInputAdvance>) => {
-        setSalaryInputAdvance({ ...salaryInputAdvance, ...newData })
+        setSalaryInputAdvance((prev) => ({ ...prev, ...newData }))
     }
 
     const updateSalaryResult = (newData: Partial<SalaryResultType>) => {
-        setSalaryResult({ ...salaryResult, ...newData })
+        setSalaryResult((prev) => ({ ...prev, ...newData }))
     }
 
     const setRegion = (newRegion: string) => {
-        // todo update sib hpfb
         dispatchSetRegion(newRegion)
         setCityPolicy(city_polices.get(newRegion))
     }
@@ -87,13 +113,20 @@ export const SalaryProvider = ({ children }) => {
     }
 
     const showSalaryResult = () => {
-        console.log("showSalaryResult")
         const result = calculateSalary(salaryInput, salaryInputAdvance, cityPolicy)
-        console.log(result)
-        console.log(salaryInput)
-        console.log(salaryInputAdvance)
-        console.log(cityPolicy)
         setSalaryResult(result)
+    }
+
+    const toggleEnableCustomerSIB = (b: boolean) => {
+        updateSalaryInput({
+            enableCustomSIB: b,
+        })
+    }
+
+    const toggleEnableCustomerHPFB = (b: boolean) => {
+        updateSalaryInput({
+            enableCustomHPFB: b,
+        })
     }
 
     return (
@@ -109,7 +142,9 @@ export const SalaryProvider = ({ children }) => {
                 updateSalaryInputAdvance,
                 updateSalaryResult,
                 setCityPolicy,
-                showSalaryResult
+                showSalaryResult,
+                toggleEnableCustomerSIB,
+                toggleEnableCustomerHPFB,
             }}>
             {children}
         </SalaryContext.Provider>

@@ -13,6 +13,9 @@ export interface SalaryContextType {
     updateSalaryResult: (newData: Partial<SalaryResultType>) => void
     setCityPolicy: (newData: CityPolicy) => void
     showSalaryResult: () => void
+
+    toggleEnableCustomerSIB: (enable: boolean) => void
+    toggleEnableCustomerHPFB: (enable: boolean) => void
 }
 
 export enum OneOffBonusType {
