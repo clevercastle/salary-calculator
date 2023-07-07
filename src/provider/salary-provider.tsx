@@ -55,13 +55,11 @@ export const SalaryProvider = ({ children }) => {
         hpfUser: 0,
         oneOffBonus: 0,
         oneOffBonusType: 0,
-        childEducation: 0,
-        continuingEducation: 0,
-        seriousDiseases: 0,
-        housingLoanInterest: 0,
-        housingRent: 0,
-        elderSupport: 0,
-        babyCare: 0,
+        oneOffBonusTax: 0,
+        tax: 0,
+        netSalary: 0,
+        salaryMinusSibHpfbAll: 0,
+        yearAllIncoming:0
     })
 
     useEffect(() => {
