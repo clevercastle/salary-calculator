@@ -58,7 +58,7 @@ export const SalaryProvider = ({ children }) => {
         oneOffBonusTax: 0,
         tax: 0,
         netSalary: 0,
-        salaryMinusSibHpfbAll: 0,
+        salaryMinusSibHpfb: 0,
         yearAllIncoming:0
     })
 
