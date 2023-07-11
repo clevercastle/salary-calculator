@@ -133,10 +133,9 @@ export const calculateSalary = (
     }
     let netSalary = 0
     if (OneOffBonusType.combine === salaryInput.oneOffBonusType) {
-        const yearTaxableIncome = NP.times(taxableIncome, 12)
-        const salaryPercent = NP.divide(yearTaxableIncome, NP.plus(yearTaxableIncome + oneOffBonus))
-        const oneOffBonusPercent = NP.divide(oneOffBonus, NP.plus(yearTaxableIncome + oneOffBonus))
-        const allNetIncoming = NP.minus(NP.plus(yearTaxableIncome, oneOffBonus), yearTax)
+        const salaryPercent = NP.divide(salaryMinusSibHpfb, NP.plus(salaryMinusSibHpfb + oneOffBonus))
+        const oneOffBonusPercent = NP.divide(oneOffBonus, NP.plus(salaryMinusSibHpfb+ oneOffBonus))
+        const allNetIncoming = NP.minus(NP.plus(NP.times(salaryMinusSibHpfb,12), oneOffBonus), yearTax)
         netSalary = NP.divide(NP.times(salaryPercent, allNetIncoming), 12)
         oneOffBonusTax = NP.minus(oneOffBonus, NP.times(oneOffBonusPercent, allNetIncoming))
     }
